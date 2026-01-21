@@ -12,3 +12,4 @@ class AppColors {
   static const Color selectionColor = Color.fromARGB(255, 224, 219, 219);
   static const Color disableColor = Color.fromARGB(255, 156, 153, 153);
 }
+// const Color(0xFF0070F2)

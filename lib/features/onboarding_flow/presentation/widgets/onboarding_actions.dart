@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_button.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
+import 'package:inspect_connect/core/utils/constants/app_colors.dart';
+import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 
 class OnBoardingActions extends StatelessWidget {
   final VoidCallback onCreate;
@@ -18,16 +20,16 @@ class OnBoardingActions extends StatelessWidget {
       children: [
         AppButton(
           height: 40,
-          buttonBackgroundColor: const Color(0xFF0070F2),
-          text: "Create Account",
+          buttonBackgroundColor: AppColors.authThemeLightColor,
+          text: createAccount,
           onTap: onCreate,
         ),
         const SizedBox(height: 20),
         GestureDetector(
           onTap: onLogin,
           child: textWidget(
-            text: "Login",
-            color: Colors.white,
+            text: loginTxt,
+            color: AppColors.whiteColor,
             textDecoration: TextDecoration.underline,
           ),
         ),

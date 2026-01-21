@@ -1,0 +1,1 @@
+enum AuthUserType { client, inspector }

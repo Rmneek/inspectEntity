@@ -12,7 +12,8 @@ class OnBoardingView extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => locator<OnBoardingViewModel>()..init(),
+      create: (_) => locator<OnBoardingViewModel>(),
+      // ..init(),
       child: const OnBoardingScreen(),
     );
   }

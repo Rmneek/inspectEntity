@@ -76,7 +76,9 @@ class SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
     Future.delayed(const Duration(seconds: 3), () {
-      context.read<SplashViewModel>().start(context);
+      if (mounted) {
+        context.read<SplashViewModel>().start(context);
+      }
     });
   }
 
@@ -96,52 +98,28 @@ class SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //     SlideTransition(
-            //   position: _logoBounceAnimation,
-            //   child: ScaleTransition(
-            //     scale: _scaleAnimation,
-            //     child: Image.asset(
-            //       appLogo,
-            //       color: AppColors.whiteColor,
-            //       width: size.width * 0.2,
-            //     ),
-            //   ),
-            // ),
-            //    const SizedBox(height: 24),
-            // SlideTransition(
-            //   position: _textBounceAnimation,
-            //   child: FadeTransition(
-            //     opacity: _fadeAnimation,
-            //     child: textWidget(
-            //       text: "Inspect Connect",
-            //       fontSize: 24,
-            //       color: AppColors.whiteColor,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-            ScaleTransition(
-              scale: CurvedAnimation(
-                parent: _controller,
-                curve: Curves.easeOutBack,
-              ),
-              child: Image.asset(
-                appLogo,
-                color: AppColors.whiteColor,
-                width: size.width * 0.2,
+            SlideTransition(
+              position: _logoBounceAnimation,
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: Image.asset(
+                  appLogo,
+                  color: AppColors.whiteColor,
+                  width: size.width * 0.2,
+                ),
               ),
             ),
             const SizedBox(height: 24),
-            FadeTransition(
-              opacity: CurvedAnimation(
-                parent: _controller,
-                curve: const Interval(0.4, 1, curve: Curves.easeIn),
-              ),
-              child: textWidget(
-                text: inspectConnectTitle,
-                fontSize: 24,
-                color: AppColors.whiteColor,
-                fontWeight: FontWeight.bold,
+            SlideTransition(
+              position: _textBounceAnimation,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: textWidget(
+                  text: inspectConnectTitle,
+                  fontSize: 24,
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

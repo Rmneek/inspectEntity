@@ -1,4 +1,13 @@
 const String inspectConnectTitle = "Inspect Connect";
+const String clientTxt = "Client";
+const String loginTxt = "Log in";
+const String inspectorTxt = "Inspector";
+const String onBoardingBullet1 =
+    "Connecting Quality Inspections\nwith Quality Projects\nfor Every Build that Matters";
+const String onBoardingBullet2 =
+    "Join a Trusted Network\nof Inspectors Connecting\nyou with Quality Opportunities";
+const String onBoardingBullet3 =
+    "Welcome to Inspect Connect - \nWhere Projects and Inspectors\nMeet to Build Better Together";
 const String importantPolicies = 'Important Policies';
 const String showUpFeePolicy = 'Show-Up Fee Policy';
 const String cancellationPolicy = 'Cancellation Policy';

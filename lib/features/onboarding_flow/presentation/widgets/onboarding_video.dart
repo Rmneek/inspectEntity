@@ -4,6 +4,7 @@ import 'package:video_player/video_player.dart';
 
 class OnBoardingVideoBackground extends StatefulWidget {
   final Alignment alignment;
+
   const OnBoardingVideoBackground({required this.alignment, super.key});
 
   @override
@@ -34,6 +35,7 @@ class _OnBoardingVideoBackgroundState extends State<OnBoardingVideoBackground>
       ..setVolume(0)
       ..play();
     _fade.forward();
+    setState(() {});
   }
 
   @override
@@ -45,11 +47,31 @@ class _OnBoardingVideoBackgroundState extends State<OnBoardingVideoBackground>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedAlign(
-      alignment: widget.alignment,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeInOut,
-      child: FadeTransition(opacity: _fade, child: VideoPlayer(_controller)),
+    if (!_controller.value.isInitialized) {
+      return const SizedBox();
+    }
+
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      height: MediaQuery.of(context).size.height * 0.85,
+      child: AnimatedAlign(
+        alignment: widget.alignment,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+        child: FadeTransition(
+          opacity: _fade,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: _controller.value.size.width,
+              height: _controller.value.size.height,
+              child: VideoPlayer(_controller),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
