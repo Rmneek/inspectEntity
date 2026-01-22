@@ -60,6 +60,7 @@ class OnBoardingScreen extends StatelessWidget {
                   OnBoardingToggle(
                     isClient: vm.isClient,
                     onSelect: vm.selectUser,
+                    showActions: vm.showActions,
                   ),
 
                   const SizedBox(height: 20),

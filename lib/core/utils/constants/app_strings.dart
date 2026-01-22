@@ -1,6 +1,25 @@
 const String inspectConnectTitle = "Inspect Connect";
 const String clientTxt = "Client";
 const String loginTxt = "Log in";
+
+const String successToastTxt = "Success";
+const String warningToastTxt = "Warning";
+const String infoToastTxt = "Info";
+const String errorToastTxt = "Error";
+const String signInSuccess = 'Sign-in successful';
+const String signInFailed = 'Sign-in failed';
+const String noInternet = 'No internet connection';
+const String loginCompleted = 'Sign-in process completed';
+
+const String emailRequired = 'Email is required';
+const String invalidEmail = 'Enter a valid email';
+const String passwordRequired = 'Please enter password';
+const String invalidPassword = 'Enter valid password';
+const String addressHintDefault = 'Enter address';
+const String googlePlacesInitFailed =
+    'Google Places initialization failed, switching to fallback mode';
+
+const String alreadyHaveAccTxt = "Already have an account? ";
 const String inspectorTxt = "Inspector";
 const String onBoardingBullet1 =
     "Connecting Quality Inspections\nwith Quality Projects\nfor Every Build that Matters";
@@ -389,3 +408,20 @@ String rateCalculationTxt({required double rate, required int blocks}) {
 String cancellationFeeWarningTxt(double fee) =>
     '⚠ Note: Since the booking time is within the next 8 hours, '
     'a cancellation fee of \$${fee.toStringAsFixed(2)} will be applied.';
+
+const String defaultCountryCode = 'IN';
+
+const String fieldRequiredError = 'This field is required';
+
+const String emailRequiredError = 'Email address is required';
+const String emailInvalidError = 'Enter a valid email address';
+
+const String passwordRequiredError = 'Password is required';
+const String passwordMinLengthError = 'Password must be at least 8 characters';
+
+const String confirmPasswordRequiredError = 'Confirm password is required';
+const String passwordMismatchError = 'Passwords do not match';
+
+// ================== VALIDATION – ADDRESS ==================
+
+const String addressRequiredError = 'Address is required';

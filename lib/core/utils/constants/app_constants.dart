@@ -43,3 +43,34 @@ const String longitudeKey = 'lon';
 
 /// local database keys
 const String weatherInfoTable = 'WeatherInfo';
+
+// api endpoints
+
+const String signInEndPoint = 'signIn';
+const String signUpEndPoint = 'signUp';
+const String verifyOtpEndPoint = 'verifyOtp';
+const String resendOtpEndPoint = 'resendOtp';
+const String changePasswordEndPoint = '$updateUserEndPoint/changePassword';
+const String updateUserEndPoint = 'user';
+const String certificateEndPoint = 'certificate';
+const String getCertificateSubTypesEndPoint = '$certificateEndPoint/subTypes';
+const String getInspectorCertificateTypesEndPoint =
+    '$certificateEndPoint/types';
+const String getInspectorCertificateTAgenciesEndPoint =
+    '$certificateEndPoint/agencies';
+const String getJurisdictionCitiesEndPoint = 'cities/jurisdictions';
+const String getInspectorDocumentTypeEndPoint = 'document/types';
+const String getSettingsEndPoint = 'settings';
+const String createBookingEndPoint = 'bookings';
+const String bookingStatusEndPoint = 'status';
+const String bookingTimerEndPoint = 'timer';
+const String uploadImageEndPoint = 'uploads';
+const String walletEndPoint = 'wallet';
+const String paymentEndPoint = 'payments';
+const String paymentIntentEndPoint = '$paymentEndPoint/paymentIntent';
+const String onboardingEndPoint = '$paymentEndPoint/onboard';
+const String notificationsEndPoint = 'notifications';
+const String deductAndTransferWalletEndPoint =
+    '$walletEndPoint/deductAndTransferWallet';
+const String subscriptionEndPoint = 'subscriptionPlans';
+const String userSubscriptionByIdEndPoint = 'subscriptions';

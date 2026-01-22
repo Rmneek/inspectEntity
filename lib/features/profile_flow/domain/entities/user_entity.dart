@@ -5,8 +5,6 @@ import 'package:inspect_connect/features/profile_flow/domain/entities/certificat
 import 'package:inspect_connect/features/profile_flow/domain/entities/current_subscription_entity.dart';
 import 'package:inspect_connect/features/profile_flow/domain/entities/device_entity.dart';
 import 'package:inspect_connect/features/profile_flow/domain/entities/document_type_entity.dart';
-import 'package:inspect_connect/features/profile_flow/domain/entities/location_entity.dart';
-import 'package:inspect_connect/features/profile_flow/domain/entities/service_area_entity.dart';
 import 'package:inspect_connect/features/profile_flow/domain/entities/user_document_entity.dart';
 
 class UserEntity {

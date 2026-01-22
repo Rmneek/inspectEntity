@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:inspect_connect/core/basecomponents/base_responsive_widget.dart';
+import 'package:inspect_connect/core/utils/app_presentation/address_auto_complete_field_widget.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_button.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_input_fields.dart';
+import 'package:inspect_connect/core/utils/auto_router_setup/auto_router.dart';
 import 'package:inspect_connect/core/utils/constants/app_asset_constants.dart';
 import 'package:inspect_connect/core/utils/constants/app_colors.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
@@ -13,9 +16,9 @@ import 'package:inspect_connect/features/auth_flow/presentation/widgets/common_a
 import 'package:provider/provider.dart';
 
 @RoutePage()
-class ForgotpPasswordView extends StatelessWidget {
+class ClientSignUpStep2View extends StatelessWidget {
   final bool showBackButton;
-  const ForgotpPasswordView({super.key, required this.showBackButton});
+  const ClientSignUpStep2View({super.key, required this.showBackButton});
 
   @override
   Widget build(BuildContext context) {
@@ -24,63 +27,72 @@ class ForgotpPasswordView extends StatelessWidget {
     return BaseResponsiveWidget(
       initializeConfig: true,
       buildWidget: (ctx, rc, app) {
-        final provider = ctx.watch<ClientViewModelProvider>();
+        final vm = ctx.watch<ClientViewModelProvider>();
 
         return CommonAuthBar(
-          title: forgotPassword,
+          title: createAccount,
+          subtitle: enterPasswordAndAddressDetailToContinue,
           showBackButton: showBackButton,
-          subtitle: forgotPasswordSubtitle,
           image: finalImage,
           rc: rc,
           form: Form(
             key: formKey,
-            autovalidateMode: provider.autoValidate
+            autovalidateMode: vm.autoValidate
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppInputField(
-                  label: emailLabel,
-                  hint: emailHint,
-                  controller: cltResetEmailCtrl,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) => provider.validateEmail(v),
-                  onChanged: (_) {
-                    if (provider.autoValidate) formKey.currentState?.validate();
-                  },
+                AppPasswordField(
+                  label: newPasswordLabel,
+                  controller: cltPasswordCtrlSignUp,
+                  obscure: vm.obscurePassword,
+                  onToggle: vm.togglePassword,
+                  validator: vm.validatePassword,
+                ),
+
+                const SizedBox(height: 14),
+
+                AppPasswordField(
+                  label: confirmNewPasswordLabel,
+                  controller: cltConfirmPasswordCtrl,
+                  obscure: vm.obscureConfirm,
+                  onToggle: vm.toggleConfirm,
+                  validator: vm.validateConfirmPassword,
+                ),
+
+                const SizedBox(height: 14),
+
+                AddressAutocompleteField(
+                  label: addressLabel,
+                  controller: cltAddressCtrl,
+                  googleApiKey: dotenv.env['GOOGLE_API_KEY']!,
+                  validator: vm.validateMailingAddress,
+                  onFullAddressFetched: vm.setAddressData,
                 ),
 
                 const SizedBox(height: 28),
 
                 AppButton(
+                  text: submitTxt,
                   buttonBackgroundColor: AppColors.authThemeColor,
                   borderColor: AppColors.authThemeColor,
-                  text: provider.isSigningIn
-                      ? sendingText
-                      : sendVerificationCode,
-                  onTap: () async {
-                    final isValid = formKey.currentState?.validate() ?? false;
-                    if (!isValid) {
-                      provider.enableAutoValidate();
-                      return;
-                    }
-                    if (!provider.isSigningIn) {
-                      await provider.requestPasswordReset(
-                        formKey: formKey,
-                        context: context,
-                      );
-                    }
+                  isLoading: vm.isSigningIn,
+                  isDisabled: vm.isSigningIn,
+                  onTap: () {
+                    vm.submitStep2(formKey: formKey, context: context);
                   },
                 ),
 
                 AuthFormSwitchRow(
-                  question: rememberPasswordText,
+                  question: alreadyHaveAccount,
                   actionText: signInTitle,
-                  onTap: () {
-                    context.router.pop();
-                  },
                   actionColor: AppColors.authThemeLightColor,
+                  onTap: () {
+                    context.router.replaceAll([
+                      ClientSignInRoute(showBackButton: false),
+                    ]);
+                  },
                 ),
               ],
             ),

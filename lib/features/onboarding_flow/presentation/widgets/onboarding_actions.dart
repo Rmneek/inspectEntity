@@ -25,13 +25,20 @@ class OnBoardingActions extends StatelessWidget {
           onTap: onCreate,
         ),
         const SizedBox(height: 20),
-        GestureDetector(
-          onTap: onLogin,
-          child: textWidget(
-            text: loginTxt,
-            color: AppColors.whiteColor,
-            textDecoration: TextDecoration.underline,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            textWidget(text: alreadyHaveAccTxt, color: AppColors.whiteColor),
+            GestureDetector(
+              onTap: onLogin,
+              child: textWidget(
+                text: loginTxt,
+                color: AppColors.whiteColor,
+                textDecorationColor: AppColors.whiteColor,
+                textDecoration: TextDecoration.underline,
+              ),
+            ),
+          ],
         ),
       ],
     );

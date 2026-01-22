@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -32,9 +32,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i320.ConnectivityCheckerHelper>(
       () => _i320.ConnectivityCheckerHelper(),
     );
-    gh.singleton<_i251.ResponsiveUiConfig>(() => _i251.ResponsiveUiConfig());
-    gh.singleton<_i807.AppFlavorsHelper>(() => _i807.AppFlavorsHelper());
     gh.singleton<_i238.AppConfigurations>(() => _i238.AppConfigurations());
+    gh.singleton<_i807.AppFlavorsHelper>(() => _i807.AppFlavorsHelper());
+    gh.singleton<_i251.ResponsiveUiConfig>(() => _i251.ResponsiveUiConfig());
     gh.factory<_i1009.HttpRequestContext>(
       () => _i1009.HttpRequestContext(gh<_i320.ConnectivityCheckerHelper>()),
     );

@@ -1,0 +1,1 @@
+enum AddressFieldStyle { appInput, bookingInput }

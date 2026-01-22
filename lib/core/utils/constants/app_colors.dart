@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color backgroundColor = Color(0xffFAF6EA);
@@ -11,5 +11,9 @@ class AppColors {
   static const Color darkShadeAuthColor = Color.fromARGB(255, 1, 67, 141);
   static const Color selectionColor = Color.fromARGB(255, 224, 219, 219);
   static const Color disableColor = Color.fromARGB(255, 156, 153, 153);
+  static const Color white70Color = Colors.white70;
+  static const Color successColor = Color(0xFF4CAF50);
+  static const Color errorColor = Color(0xFFF44336);
+  static const Color warningColor = Color(0xFFFFC107);
+  static const Color infoColor = Color(0xFF2196F3);
 }
-// const Color(0xFF0070F2)

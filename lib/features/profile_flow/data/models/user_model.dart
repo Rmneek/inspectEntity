@@ -3,7 +3,7 @@ import 'package:inspect_connect/features/profile_flow/data/models/current_subscr
 import 'package:inspect_connect/features/profile_flow/data/models/device_model.dart';
 import 'package:inspect_connect/features/profile_flow/data/models/document_type_model.dart';
 import 'package:inspect_connect/features/profile_flow/data/models/location_model.dart';
-import 'package:inspect_connect/features/profile_flow/data/models/service_area_%20model.dart';
+import 'package:inspect_connect/features/profile_flow/data/models/service_area_model.dart';
 import 'package:inspect_connect/features/profile_flow/data/models/upload_document_model.dart';
 import 'package:inspect_connect/features/profile_flow/data/models/user_document_model.dart';
 import 'package:inspect_connect/features/profile_flow/domain/entities/user_entity.dart';

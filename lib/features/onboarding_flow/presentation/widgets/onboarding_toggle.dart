@@ -5,11 +5,14 @@ import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 
 class OnBoardingToggle extends StatelessWidget {
   final bool? isClient;
+  final bool? showActions;
+
   final void Function(bool) onSelect;
 
   const OnBoardingToggle({
     required this.isClient,
     required this.onSelect,
+    this.showActions = false,
     super.key,
   });
 
@@ -51,6 +54,7 @@ class OnBoardingToggle extends StatelessWidget {
             Row(
               children: [
                 _option(clientTxt, true),
+                showActions! ? SizedBox() : VerticalDivider(),
                 _option(inspectorTxt, false),
               ],
             ),

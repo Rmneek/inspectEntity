@@ -1,0 +1,1 @@
+enum AuthTarget { signIn, signUp }

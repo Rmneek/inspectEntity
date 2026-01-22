@@ -41,8 +41,9 @@ class SplashViewModel extends BaseViewModel {
     //   await _handleInspector(context);
     //   return;
     // }
-
-    navigate(context, const OnBoardingRoute());
+    if (context.mounted) {
+      navigate(context, const OnBoardingRoute());
+    }
   }
 
   Future<void> handleInspector(BuildContext context) async {

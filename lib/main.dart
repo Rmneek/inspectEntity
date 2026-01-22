@@ -6,6 +6,9 @@ import 'package:inspect_connect/core/utils/auto_router_setup/auto_router.dart';
 import 'package:inspect_connect/core/utils/helpers/app_flavor_helper/app_flavors_helper.dart';
 import 'package:inspect_connect/core/utils/helpers/app_flavor_helper/environment_config.dart';
 import 'package:flutter/material.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/view_model/auth_flow_provider.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,21 +39,16 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return
-    //  MultiProvider(
-    //   providers: [
-    // ChangeNotifierProvider<WeatherDetailsViewModel>(
-    //   create: (BuildContext context) => locator<WeatherDetailsViewModel>(),
-    // ),
-    // ChangeNotifierProvider<AddNewCityViewModel>(
-    //   create: (BuildContext context) => locator<AddNewCityViewModel>(),
-    // ),
-    // ],
-    // child:
-    MaterialApp.router(
-      routerConfig: _appRouter.config(),
-      debugShowCheckedModeBanner: false,
-      // ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthFlowProvider()),
+        ChangeNotifierProvider(create: (_) => ClientViewModelProvider()),
+      ],
+
+      child: MaterialApp.router(
+        routerConfig: _appRouter.config(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
