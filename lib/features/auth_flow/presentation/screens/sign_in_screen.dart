@@ -36,6 +36,9 @@ class ClientSignInView extends StatelessWidget {
           rc: rc,
           form: Form(
             key: formKey,
+            autovalidateMode: provider.loginAutoValidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -46,7 +49,9 @@ class ClientSignInView extends StatelessWidget {
                   hint: emailHint,
                   validator: provider.validateEmail,
                   onChanged: (_) {
-                    if (provider.autoValidate) formKey.currentState?.validate();
+                    if (provider.loginAutoValidate) {
+                      formKey.currentState?.validate();
+                    }
                   },
                 ),
                 const SizedBox(height: 14),
@@ -57,15 +62,20 @@ class ClientSignInView extends StatelessWidget {
                   onToggle: provider.toggleObscure,
                   validator: provider.validateRequired,
                   onChanged: (_) {
-                    if (provider.autoValidate) formKey.currentState?.validate();
+                    if (provider.loginAutoValidate) {
+                      formKey.currentState?.validate();
+                    }
                   },
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () => context.pushRoute(
-                      ForgotpPasswordRoute(showBackButton: true),
-                    ),
+                    onPressed: () {
+                      context.pushRoute(
+                        ForgotpPasswordRoute(showBackButton: true),
+                      );
+                      provider.clearAuthControllers();
+                    },
                     child: textWidget(
                       text: forgotPassword,
                       fontWeight: FontWeight.w400,

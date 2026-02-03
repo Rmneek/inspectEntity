@@ -8,8 +8,9 @@ import 'package:inspect_connect/core/utils/constants/app_text_editing_controller
 import 'package:inspect_connect/core/utils/helpers/device_helper/device_info_helper.dart';
 import 'package:inspect_connect/core/utils/toast_service/toast_service.dart';
 import 'package:inspect_connect/features/auth_flow/domain/entities/auth_user_entity.dart';
-import 'package:inspect_connect/features/auth_flow/domain/params/sign_in_params.dart';
-import 'package:inspect_connect/features/auth_flow/domain/usecases/sign_in_usecase.dart';
+import 'package:inspect_connect/features/auth_flow/domain/entities/geo_location_entity.dart';
+import 'package:inspect_connect/features/auth_flow/domain/params/client_sign_up_params.dart';
+import 'package:inspect_connect/features/auth_flow/domain/usecases/client_sign_up_usecase.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model.dart';
 
 class ClientSignUpService {
@@ -20,30 +21,42 @@ class ClientSignUpService {
     required GlobalKey<FormState> formKey,
     required BuildContext context,
   }) async {
-    vm.enableSignupAutoValidate();
+    vm.enableSignup1AutoValidate();
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    vm.setLoading(true);
+    vm.setSigningIn(true);
     try {
-      vm.deviceToken = await DeviceInfoHelper.getDeviceToken();
-      vm.deviceType = await DeviceInfoHelper.getDeviceType();
+      final deviceToken = await DeviceInfoHelper.getDeviceToken();
+      final deviceType = await DeviceInfoHelper.getDeviceType();
 
-      final useCase = locator<SignInUseCase>();
-      final params = SignInParams(
-        // role: 1,
+      final useCase = locator<ClientSignUpUsecase>();
+      final params = ClientSignUpParams(
+        role: 1,
         email: cltEmailCtrlSignUp.text.trim(),
-        // name: cltFullNameCtrl.text.trim(),
-        // phoneNumber: cltPhoneCtrl.text.trim(),
+        name: cltFullNameCtrl.text.trim(),
+        phoneNumber: cltPhoneCtrl.text.trim().toString(),
+        countryCode: cltCountryCodeCtrl.text.trim().toString() != ""
+            ? cltCountryCodeCtrl.text.trim().toString()
+            : "+91",
         password: cltPasswordCtrlSignUp.text.trim(),
-        deviceToken: vm.deviceToken,
-        deviceType: vm.deviceType,
+        deviceToken: deviceToken,
+        deviceType: deviceType,
+        mailingAddress: cltAddressCtrl.text.toString(),
+        zip: 'pincode.toString()',
+        agreedToTerms: true,
+        isTruthfully: true,
+        location: GeoLocationEntity(
+          locationName: 'locationName',
+          latitude: 0,
+          longitude: 0,
+        ),
       );
-
-      final state = await vm.executeParamsUseCase<AuthUserEntity, SignInParams>(
-        useCase: useCase,
-        query: params,
-        launchLoader: true,
-      );
+      final state = await vm
+          .executeParamsUseCase<AuthUserEntity, ClientSignUpParams>(
+            useCase: useCase,
+            query: params,
+            launchLoader: true,
+          );
 
       state?.when(
         data: (user) async {
@@ -58,7 +71,7 @@ class ClientSignUpService {
         },
       );
     } finally {
-      vm.setLoading(false);
+      vm.setSigningIn(false);
     }
   }
 }

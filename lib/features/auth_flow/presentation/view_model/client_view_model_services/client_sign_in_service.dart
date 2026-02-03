@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/commondomain/entities/based_api_result/api_result_state.dart';
 import 'package:inspect_connect/core/di/app_component/app_component.dart';
@@ -18,24 +19,26 @@ class ClientSignInService {
     required GlobalKey<FormState> formKey,
     required BuildContext context,
   }) async {
-    vm.enableLoginAutoValidate();
-    if (!(formKey.currentState?.validate() ?? false)) return;
+    log('--tapped--service->. signIn');
 
-    vm.setLoading(true);
+    if (!(formKey.currentState?.validate() ?? false)) return;
+    vm.enableLoginAutoValidate();
+
+    vm.setSigningIn(true);
     try {
-      vm.deviceToken = await DeviceInfoHelper.getDeviceToken();
-      vm.deviceType = await DeviceInfoHelper.getDeviceType();
+      final deviceToken = await DeviceInfoHelper.getDeviceToken();
+      final deviceType = await DeviceInfoHelper.getDeviceType();
 
       final useCase = locator<SignInUseCase>();
-      final state =
-          await vm.executeParamsUseCase<AuthUserEntity, SignInParams>(
+      final params = SignInParams(
+        email: cltEmailCtrl.text.trim(),
+        password: cltPasswordCtrl.text.trim(),
+        deviceToken: deviceToken,
+        deviceType: deviceType,
+      );
+      final state = await vm.executeParamsUseCase<AuthUserEntity, SignInParams>(
         useCase: useCase,
-        query: SignInParams(
-          email: cltEmailCtrl.text.trim(),
-          password: cltPasswordCtrl.text.trim(),
-          deviceToken: vm.deviceToken,
-          deviceType: vm.deviceType,
-        ),
+        query: params,
         launchLoader: true,
       );
 
@@ -46,17 +49,20 @@ class ClientSignInService {
           if (!context.mounted) return;
 
           if (user.role == 1) {
+            log('---------> User got logged in ');
             // context.router.replaceAll([const ClientDashboardRoute()]);
           } else {
             // await vm.checkInspectorState(context);
           }
+          cltEmailCtrl.clear();
+          cltPasswordCtrl.clear();
         },
         error: (e) {
           ToastService.error(e.message ?? signInFailed);
         },
       );
     } finally {
-      vm.setLoading(false);
+      vm.setSigningIn(false);
     }
   }
 }

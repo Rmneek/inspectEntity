@@ -26,12 +26,27 @@ const String contentMultipartTypeValue = 'multipart/form-data';
 
 ///This is the time limit for every api call
 const Duration timeOutDuration = Duration(seconds: 20);
+String stripeOnboardingWebViewUrl =
+    "https://inspect-connect-cjdwdhh6b4erb5b8.westus2-01.azurewebsites.net";
+String socketUrl =
+    "https://inspect-connect-api-auakczg0ave2bqex.westus2-01.azurewebsites.net/";
 
-///The app base Url should be provided in this value
-const String devBaseUrl = 'https://api.openweathermap.org/data/2.5';
-const String prodBaseUrl = 'https://api.openweathermap.org/data/2.5/prod';
-const String qaBaseUrl = 'https://api.openweathermap.org/data/2.5/qa';
-const String uatBaseUrl = 'https://api.openweathermap.org/data/2.5/uat';
+String devBaseUrl =
+    // Platform.isIOS
+    // ?
+    // 'http://localhost:5002/api/v1/';
+    // : 'http://10.0.2.2:5002/api/v1/';
+    // "http://192.168.1.8:5002/api/v1/";
+    'https://inspect-connect-api-auakczg0ave2bqex.westus2-01.azurewebsites.net/api/v1/';
+const String prodBaseUrl =
+    'https://inspect-connect-api-auakczg0ave2bqex.westus2-01.azurewebsites.net/api/v1/';
+const String qaBaseUrl =
+    'https://inspect-connect-api-auakczg0ave2bqex.westus2-01.azurewebsites.net/api/v1/';
+const String uatBaseUrl =
+    'https://inspect-connect-api-auakczg0ave2bqex.westus2-01.azurewebsites.net/api/v1/';
+
+const String stripePublishableKey =
+    "pk_test_51RuoE4A1eZHeCW31LaeAmCLpWw0Zmyme5RfE3HG8Svoum8yGvBmYhm2gatOR6zWhyn0PmQGcJQqE5GtzvEIuAVKN00W26f1it7";
 
 /// getWeather details uri's and header keys
 const String getWeatherDetails = '/weather';

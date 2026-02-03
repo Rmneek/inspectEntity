@@ -34,7 +34,7 @@ class ForgotpPasswordView extends StatelessWidget {
           rc: rc,
           form: Form(
             key: formKey,
-            autovalidateMode: provider.autoValidate
+            autovalidateMode: provider.forgotAutoValidate
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
             child: Column(
@@ -47,7 +47,9 @@ class ForgotpPasswordView extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) => provider.validateEmail(v),
                   onChanged: (_) {
-                    if (provider.autoValidate) formKey.currentState?.validate();
+                    if (provider.forgotAutoValidate) {
+                      formKey.currentState?.validate();
+                    }
                   },
                 ),
 
@@ -62,7 +64,7 @@ class ForgotpPasswordView extends StatelessWidget {
                   onTap: () async {
                     final isValid = formKey.currentState?.validate() ?? false;
                     if (!isValid) {
-                      provider.enableAutoValidate();
+                      provider.enableForgotAutoValidate();
                       return;
                     }
                     if (!provider.isSigningIn) {
@@ -79,6 +81,7 @@ class ForgotpPasswordView extends StatelessWidget {
                   actionText: signInTitle,
                   onTap: () {
                     context.router.pop();
+                    provider.clearAuthControllers();
                   },
                   actionColor: AppColors.authThemeLightColor,
                 ),

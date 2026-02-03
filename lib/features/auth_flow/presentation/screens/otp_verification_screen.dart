@@ -56,7 +56,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         return CommonAuthBar(
           showBackButton: widget.addShowButton,
           title: verifyCode,
-          subtitle:enterTheCodeSentToPhone,
+          subtitle: enterTheCodeSentToPhone,
           image: finalImage,
           rc: rc,
           form: Form(
@@ -141,12 +141,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                 ),
                 widget.showSignInText
                     ? AuthFormSwitchRow(
-                        question: alreadyHaveAccount,
+                        question: alreadyHaveAccTxt,
                         actionText: signInTitle,
                         onTap: () {
-                          // context.router.replaceAll([
-                          //   ClientSignInRoute(showBackButton: false),
-                          // ]);
+                          context.router.replaceAll([
+                            ClientSignInRoute(showBackButton: false),
+                          ]);
                         },
                         actionColor: AppColors.authThemeLightColor,
                       )

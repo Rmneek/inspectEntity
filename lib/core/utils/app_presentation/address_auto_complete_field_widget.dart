@@ -101,14 +101,18 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
       };
 
       for (var comp in place.addressComponents ?? []) {
-        if (comp.types.contains(AppKeywords.locality))
+        if (comp.types.contains(AppKeywords.locality)) {
           components[AppKeywords.city] = comp.name;
-        if (comp.types.contains(AppKeywords.administrativeAreaLevel1))
+        }
+        if (comp.types.contains(AppKeywords.administrativeAreaLevel1)) {
           components[AppKeywords.state] = comp.name;
-        if (comp.types.contains(AppKeywords.postalCode))
+        }
+        if (comp.types.contains(AppKeywords.postalCode)) {
           components[AppKeywords.pincode] = comp.name;
-        if (comp.types.contains(AppKeywords.country))
+        }
+        if (comp.types.contains(AppKeywords.country)) {
           components[AppKeywords.country] = comp.name;
+        }
       }
 
       widget.onFullAddressFetched?.call({

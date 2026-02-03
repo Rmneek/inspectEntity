@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/basecomponents/base_view_model.dart';
 import 'package:inspect_connect/core/utils/auto_router_setup/auto_router.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
-import 'package:inspect_connect/features/auth_flow/domain/enums/auth_user_enum.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/auth_flow_provider.dart';
 import 'package:provider/provider.dart';
 

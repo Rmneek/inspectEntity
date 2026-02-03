@@ -23,11 +23,11 @@ class ClientSignUpStep2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+        final vm = context.watch<ClientViewModelProvider>();
 
     return BaseResponsiveWidget(
       initializeConfig: true,
       buildWidget: (ctx, rc, app) {
-        final vm = ctx.watch<ClientViewModelProvider>();
 
         return CommonAuthBar(
           title: createAccount,
@@ -37,7 +37,7 @@ class ClientSignUpStep2View extends StatelessWidget {
           rc: rc,
           form: Form(
             key: formKey,
-            autovalidateMode: vm.autoValidate
+            autovalidateMode: vm.signup2AutoValidate
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
             child: Column(
@@ -48,7 +48,7 @@ class ClientSignUpStep2View extends StatelessWidget {
                   controller: cltPasswordCtrlSignUp,
                   obscure: vm.obscurePassword,
                   onToggle: vm.togglePassword,
-                  validator: vm.validatePassword,
+                  validator: vm.validateSignUpPassword,
                 ),
 
                 const SizedBox(height: 14),
@@ -85,7 +85,7 @@ class ClientSignUpStep2View extends StatelessWidget {
                 ),
 
                 AuthFormSwitchRow(
-                  question: alreadyHaveAccount,
+                  question: alreadyHaveAccTxt,
                   actionText: signInTitle,
                   actionColor: AppColors.authThemeLightColor,
                   onTap: () {

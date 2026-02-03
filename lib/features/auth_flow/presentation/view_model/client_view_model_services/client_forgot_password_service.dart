@@ -14,12 +14,12 @@ class ClientForgotPasswordService {
     vm.enableForgotAutoValidate();
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    vm.setLoading(true);
+    vm.setSigningIn(true);
     try {
       // vm.startOtpFlow(OtpPurpose.forgotPassword);
       context.pushRoute(OtpVerificationRoute(addShowButton: true));
     } finally {
-      vm.setLoading(false);
+      vm.setSigningIn(false);
     }
   }
 }

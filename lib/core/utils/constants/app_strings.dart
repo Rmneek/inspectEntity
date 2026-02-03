@@ -157,15 +157,9 @@ const String forgotPassword = 'Forget Password?';
 const String signingIn = 'Signing In...';
 
 const String dontHaveAccount = "Don’t have an account? ";
-const String createAccountSubtitle = 'Create Your Account!';
-
-const String alreadyHaveAccount = 'Already have an account?';
-
 const String fullNameLabel = 'Full Name';
-const String fullNameHint = 'Full Name';
 
 const String phoneNumberLabel = 'Phone Number';
-const String phoneNumberHint = 'Phone Number';
 
 const String phoneRequiredError = 'Phone is required';
 const String phoneInvalidError = 'Enter a valid phone';
@@ -421,7 +415,5 @@ const String passwordMinLengthError = 'Password must be at least 8 characters';
 
 const String confirmPasswordRequiredError = 'Confirm password is required';
 const String passwordMismatchError = 'Passwords do not match';
-
-// ================== VALIDATION – ADDRESS ==================
 
 const String addressRequiredError = 'Address is required';

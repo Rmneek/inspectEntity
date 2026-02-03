@@ -34,12 +34,12 @@ class ClientSignUpStep1View extends StatelessWidget {
         return CommonAuthBar(
           title: signUpTitle,
           showBackButton: showBackButton,
-          subtitle: createAccountSubtitle,
+          subtitle: signUpSubtitle,
           image: finalImage,
           rc: rc,
           form: Form(
             key: formKey,
-            autovalidateMode: vm.autoValidate
+            autovalidateMode: vm.signup1AutoValidate
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
             child: Column(
@@ -47,11 +47,11 @@ class ClientSignUpStep1View extends StatelessWidget {
               children: [
                 AppInputField(
                   label: fullNameLabel,
-                  hint: fullNameHint,
+                  hint: fullNameLabel,
                   controller: cltFullNameCtrl,
                   validator: vm.validateRequired,
                   onChanged: (_) {
-                    if (vm.autoValidate) formKey.currentState?.validate();
+                    if (vm.signup1AutoValidate) formKey.currentState?.validate();
                   },
                 ),
                 const SizedBox(height: 14),
@@ -173,7 +173,7 @@ class ClientSignUpStep1View extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   validator: vm.validateEmail,
                   onChanged: (_) {
-                    if (vm.autoValidate) formKey.currentState?.validate();
+                    if (vm.signup1AutoValidate) formKey.currentState?.validate();
                   },
                 ),
                 const SizedBox(height: 28),
@@ -187,7 +187,7 @@ class ClientSignUpStep1View extends StatelessWidget {
                 ),
 
                 AuthFormSwitchRow(
-                  question: alreadyHaveAccount,
+                  question: alreadyHaveAccTxt,
                   actionText: signInTitle,
                   onTap: () => vm.switchAuth(
                     context: context,

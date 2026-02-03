@@ -9,7 +9,7 @@ class ClientOtpService {
   Future<void> verify(BuildContext context) async {
     if (!vm.canVerify) return;
 
-    vm.setLoading(true);
+    vm.setSigningIn(true);
     try {
       // final user = await locator<AuthLocalDataSource>().getUser();
       // if (user == null) throw Exception(userNotFoundInLocal);
@@ -45,7 +45,7 @@ class ClientOtpService {
       //   },
       // );
     } finally {
-      vm.setLoading(false);
+      vm.setSigningIn(false);
     }
   }
 

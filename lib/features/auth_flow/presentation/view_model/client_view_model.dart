@@ -1,26 +1,20 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/basecomponents/base_view_model.dart';
-import 'package:inspect_connect/core/commondomain/entities/based_api_result/api_result_state.dart';
-import 'package:inspect_connect/core/di/app_component/app_component.dart';
 import 'package:inspect_connect/core/utils/auto_router_setup/auto_router.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 import 'package:inspect_connect/core/utils/constants/app_text_editing_controllers.dart';
-import 'package:inspect_connect/core/utils/helpers/device_helper/device_info_helper.dart';
-import 'package:inspect_connect/core/utils/toast_service/toast_service.dart';
 import 'package:inspect_connect/features/auth_flow/data/services/auth_navigation_service.dart';
-import 'package:inspect_connect/features/auth_flow/domain/entities/auth_user_entity.dart';
 import 'package:inspect_connect/features/auth_flow/domain/enums/auth_targer_enum.dart';
 import 'package:inspect_connect/features/auth_flow/domain/enums/client_sign_up_step_enum.dart';
-import 'package:inspect_connect/features/auth_flow/domain/params/sign_in_params.dart';
-import 'package:inspect_connect/features/auth_flow/domain/usecases/sign_in_usecase.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/auth_flow_provider.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model_services/client_forgot_password_service.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model_services/client_otp_service.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model_services/client_sign_in_service.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model_services/client_sign_up_service.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
 
@@ -32,24 +26,27 @@ class ClientViewModelProvider extends BaseViewModel {
     forgotPasswordService = ClientForgotPasswordService(this);
   }
 
-  // ================= SERVICES =================
   late final ClientSignInService signInService;
   late final ClientSignUpService signUpService;
   late final ClientOtpService otpService;
   late final ClientForgotPasswordService forgotPasswordService;
-
-  // ================= AUTOVALIDATE =================
   bool loginAutoValidate = false;
-  bool signupAutoValidate = false;
-  bool forgotAutoValidate = false;
+  bool signup1AutoValidate = false;
+  bool signup2AutoValidate = false;
 
+  bool forgotAutoValidate = false;
   void enableLoginAutoValidate() {
     loginAutoValidate = true;
     notifyListeners();
   }
 
-  void enableSignupAutoValidate() {
-    signupAutoValidate = true;
+  void enableSignup1AutoValidate() {
+    signup1AutoValidate = true;
+    notifyListeners();
+  }
+
+  void enableSignup2AutoValidate() {
+    signup2AutoValidate = true;
     notifyListeners();
   }
 
@@ -58,14 +55,7 @@ class ClientViewModelProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  // ================= UI STATE =================
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
 
-  void setLoading(bool v) {
-    _isLoading = v;
-    notifyListeners();
-  }
 
   bool obscurePassword = true;
   bool obscureConfirm = true;
@@ -80,16 +70,12 @@ class ClientViewModelProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  String deviceToken = '';
-  String deviceType = '';
-
   String? validateSignINPassword(String? v) {
     if (v == null || v.isEmpty) return passwordRequiredError;
     // return v.length < 6 ? 'Min 6 chars' : null;
     return null;
   }
 
-  // ================= DISPOSE =================
   @override
   void dispose() {
     _timer?.cancel();
@@ -97,8 +83,6 @@ class ClientViewModelProvider extends BaseViewModel {
     super.dispose();
   }
 
-  bool _autoValidate = false;
-  bool get autoValidate => _autoValidate;
   bool _obscure = true;
   bool get obscure => _obscure;
   bool _isSigningIn = false;
@@ -121,11 +105,7 @@ class ClientViewModelProvider extends BaseViewModel {
   Timer? _timer;
 
   bool _lastCanVerify = false;
-  Map<String, dynamic>? _addressData;
-  // String? phoneIso;
-  // String? phoneDial;
-  // String? phoneRaw;
-  // String? phoneE164;
+  Map<String, dynamic>? addressData;
   String? _phoneIso;
   String? _phoneDialCode;
   String? _phoneRaw;
@@ -141,12 +121,12 @@ class ClientViewModelProvider extends BaseViewModel {
     _phoneDialCode = phone.countryCode;
     _phoneRaw = phone.number;
     _phoneE164 = phone.completeNumber;
-    //  if (autoValidate) {
+    //  if (signup1AutoValidate) {
     //                             state.validate();
     //                           }
   }
 
-  void onCountryChanged(country) {
+  void onCountryChanged(Country country) {
     _phoneIso = country.code;
     _phoneDialCode = '+${country.dialCode}';
     _phoneE164 = (_phoneRaw?.isNotEmpty ?? false)
@@ -155,7 +135,7 @@ class ClientViewModelProvider extends BaseViewModel {
   }
 
   void setAddressData(Map<String, dynamic> data) {
-    _addressData = data;
+    addressData = data;
   }
 
   void goToStep2() {
@@ -171,13 +151,6 @@ class ClientViewModelProvider extends BaseViewModel {
   void toggleObscure() {
     _obscure = !_obscure;
     notifyListeners();
-  }
-
-  void enableAutoValidate() {
-    if (!_autoValidate) {
-      _autoValidate = true;
-      notifyListeners();
-    }
   }
 
   void verifyInit() {
@@ -209,13 +182,16 @@ class ClientViewModelProvider extends BaseViewModel {
       (v == null || v.trim().isEmpty) ? fieldRequiredError : null;
 
   String? validateEmail(String? v) {
-    if (v == null || v.trim().isEmpty) return emailRequiredError;
-    final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
-    return ok ? null : emailInvalidError;
+    if (v == null || v.trim().isEmpty) return 'Email is required';
+
+    final email = v.trim();
+    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+
+    return regex.hasMatch(email) ? null : 'Enter a valid email';
   }
 
   String? validatePhone() {
-    if (!_autoValidate) return null;
+    if (!signup1AutoValidate) return null;
     if (_phoneE164 == null || _phoneE164!.isEmpty) {
       return phoneRequiredError;
     }
@@ -225,23 +201,20 @@ class ClientViewModelProvider extends BaseViewModel {
     return null;
   }
 
-  String? validatePassword(String? v) {
-    RegExp regex = RegExp(
+  String? validateSignUpPassword(String? value) {
+    if (value == null || value.isEmpty) return passwordRequiredError;
+    if (value.length < 6) return minimumSixCharactersRequired;
+    final regex = RegExp(
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$',
     );
-    if (v == null || v.isEmpty) {
-      return passwordRequiredError;
-    } else {
-      if (!regex.hasMatch(v)) {
-        return invalidPassword;
-      } else {
-        return null;
-      }
+    if (!regex.hasMatch(value)) {
+      return includeUpperLowerNumberSymbol;
     }
+    return null;
   }
 
   String? validateConfirmPassword(String? value) {
-    if (!_autoValidate) return null;
+    if (!signup2AutoValidate) return null;
     if (value == null || value.isEmpty) {
       return confirmPasswordRequiredError;
     }
@@ -251,13 +224,6 @@ class ClientViewModelProvider extends BaseViewModel {
     return null;
   }
 
-  // String? validateMailingAddress(String? value) {
-  //   if (!_autoValidate) return null;
-  //   if (_addressData == null) {
-  //     return addressRequiredError;
-  //   }
-  //   return null;
-  // }
   String? validateMailingAddress(String? value) {
     if (value == null || value.isEmpty) return 'Please enter mailing address';
     if (value.length < 6) return 'Please enter address of atleast 6 characters';
@@ -265,72 +231,28 @@ class ClientViewModelProvider extends BaseViewModel {
     return null;
   }
 
-  void reset() {
-    _autoValidate = false;
-    _phoneIso = null;
-    _phoneDialCode = null;
-    _phoneRaw = null;
-    _phoneE164 = null;
-    _addressData = null;
-    setSigningIn(true);
-  }
+  // void reset() {
+  //   signup1AutoValidate = false;
+  //   signup2AutoValidate = false;
+
+  //   _phoneIso = null;
+  //   _phoneDialCode = null;
+  //   _phoneRaw = null;
+  //   _phoneE164 = null;
+  //   addressData = null;
+  //   setSigningIn(true);
+  // }
 
   Future<void> signIn({
     required GlobalKey<FormState> formKey,
     required BuildContext context,
   }) async {
-    if (!(formKey.currentState?.validate() ?? false)) {
-      enableAutoValidate();
-      return;
-    }
-
-    setSigningIn(true);
-
-    try {
-      final token = await DeviceInfoHelper.getDeviceToken();
-      final type = await DeviceInfoHelper.getDeviceType();
-
-      final params = SignInParams(
-        email: cltEmailCtrl.text.trim(),
-        password: cltPasswordCtrl.text.trim(),
-        deviceToken: token,
-        deviceType: type,
-      );
-
-      final result = await executeParamsUseCase<AuthUserEntity, SignInParams>(
-        useCase: locator<SignInUseCase>(),
-        query: params,
-        launchLoader: true,
-      );
-
-      result?.when(
-        data: (user) async {
-          // await fetchUserDetail(user: user, context: context);
-          if (!context.mounted) return;
-
-          ToastService.success(signInSuccess);
-          cltEmailCtrl.clear();
-          cltPasswordCtrl.clear();
-
-          // if (user.role == 1) {
-          //   context.router.replaceAll([const ClientDashboardRoute()]);
-          // } else {
-          //   checkInspectorState(context);
-          // }
-        },
-        error: (e) {
-          ToastService.error(e.message ?? signInFailed);
-        },
-      );
-    } on SocketException catch (_) {
-      ToastService.error(noInternet);
-    } finally {
-      setSigningIn(false);
-    }
+    log('--tapped--model->. signIn');
+    signInService.signIn(formKey: formKey, context: context);
   }
 
   void switchAuth({required BuildContext context, required AuthTarget target}) {
-    _clearAuthControllers();
+    clearAuthControllers();
 
     final router = context.router;
     final authFlow = context.read<AuthFlowProvider>();
@@ -380,7 +302,7 @@ class ClientViewModelProvider extends BaseViewModel {
     final isValid = formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
-      enableAutoValidate();
+      enableSignup1AutoValidate();
       return;
     }
 
@@ -393,10 +315,12 @@ class ClientViewModelProvider extends BaseViewModel {
     required GlobalKey<FormState> formKey,
     required BuildContext context,
   }) async {
+    enableSignup2AutoValidate();
+
     final isValid = formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
-      enableAutoValidate();
+      enableSignup2AutoValidate();
       return;
     }
 
@@ -404,7 +328,7 @@ class ClientViewModelProvider extends BaseViewModel {
     notifyListeners();
 
     try {
-      // 🔥 Final API signup call here
+      signUpService.signUp(formKey: formKey, context: context);
     } finally {
       setSigningIn(false);
 
@@ -412,34 +336,30 @@ class ClientViewModelProvider extends BaseViewModel {
     }
   }
 
-  void _clearAuthControllers() {
+  void clearAuthControllers() {
     cltEmailCtrl.clear();
     cltPasswordCtrl.clear();
     cltEmailCtrlSignUp.clear();
     cltPhoneCtrl.clear();
     cltFullNameCtrl.clear();
+    cltPasswordCtrlSignUp.clear();
+    cltConfirmPasswordCtrl.clear();
+    cltResetEmailCtrl.clear();
+    loginAutoValidate = false;
+    signup1AutoValidate = false;
+    signup2AutoValidate = false;
+    forgotAutoValidate = false;
+    notifyListeners();
   }
 
   Future<void> requestPasswordReset({
     required GlobalKey<FormState> formKey,
     required BuildContext context,
   }) async {
-    if (!(formKey.currentState?.validate() ?? false))
-      //  enableAutoValidate();
+    if (!(formKey.currentState?.validate() ?? false)) {
       return;
-    // setSigningIn(true);
-
-    // _isSendingReset = true;
-    // notifyListeners();
-
-    try {
-      //   final email = cltResetEmailCtrl.text.trim();
-      //   _resetTargetLabel = email;
-      //   startOtpFlow(OtpPurpose.forgotPassword);
-      //   cltResetEmailCtrl.clear();
-      //   context.pushRoute(OtpVerificationRoute(addShowButton: true));
-    } finally {
-      // _isSendingReset = false;
+    }
+    try {} finally {
       notifyListeners();
     }
   }
