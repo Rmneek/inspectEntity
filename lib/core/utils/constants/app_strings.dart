@@ -271,7 +271,6 @@ const String minimumSixCharactersRequired = 'Minimum 6 characters required';
 const String includeUpperLowerNumberSymbol =
     'Include upper, lower, number & symbol';
 const String confirmYourPassword = 'Confirm your password';
-const String passwordsDoNotMatch = 'Passwords do not match';
 const String sessionExpired = 'Session Expired';
 const String sessionExpiredMessage = 'Your session has expired.';
 const String pleaseLogInAgain = 'Please log in again.';
@@ -405,7 +404,7 @@ String cancellationFeeWarningTxt(double fee) =>
 
 const String defaultCountryCode = 'IN';
 
-const String fieldRequiredError = 'This field is required';
+const String fieldRequiredError = 'Required';
 
 const String emailRequiredError = 'Email address is required';
 const String emailInvalidError = 'Enter a valid email address';
@@ -417,3 +416,8 @@ const String confirmPasswordRequiredError = 'Confirm password is required';
 const String passwordMismatchError = 'Passwords do not match';
 
 const String addressRequiredError = 'Address is required';
+const String emailRegexExpression =
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+
+const String passwordRegexExpression =
+    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$';

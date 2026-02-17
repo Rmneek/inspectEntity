@@ -55,8 +55,6 @@ class ClientViewModelProvider extends BaseViewModel {
     notifyListeners();
   }
 
-
-
   bool obscurePassword = true;
   bool obscureConfirm = true;
 
@@ -72,7 +70,6 @@ class ClientViewModelProvider extends BaseViewModel {
 
   String? validateSignINPassword(String? v) {
     if (v == null || v.isEmpty) return passwordRequiredError;
-    // return v.length < 6 ? 'Min 6 chars' : null;
     return null;
   }
 
@@ -121,9 +118,6 @@ class ClientViewModelProvider extends BaseViewModel {
     _phoneDialCode = phone.countryCode;
     _phoneRaw = phone.number;
     _phoneE164 = phone.completeNumber;
-    //  if (signup1AutoValidate) {
-    //                             state.validate();
-    //                           }
   }
 
   void onCountryChanged(Country country) {
@@ -230,18 +224,6 @@ class ClientViewModelProvider extends BaseViewModel {
 
     return null;
   }
-
-  // void reset() {
-  //   signup1AutoValidate = false;
-  //   signup2AutoValidate = false;
-
-  //   _phoneIso = null;
-  //   _phoneDialCode = null;
-  //   _phoneRaw = null;
-  //   _phoneE164 = null;
-  //   addressData = null;
-  //   setSigningIn(true);
-  // }
 
   Future<void> signIn({
     required GlobalKey<FormState> formKey,

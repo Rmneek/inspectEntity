@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/screens/signup/inspector_signup/sign_up_steps/inspector_sign_up_content_screen.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/view_model/inspector_view_model.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class InspectorSignUpView extends StatelessWidget {
@@ -10,12 +12,10 @@ class InspectorSignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: textWidget(text: "Inspector callled")),
+      body: ChangeNotifierProvider(
+        create: (_) => InspectorViewModelProvider(),
+        child: InspectorSignUpContent(showBackButton: showBackButton),
+      ),
     );
-    // InspectorSignUpContent(showBackButton: showBackButton);
-    //  ChangeNotifierProvider(
-    //   create: (_) => InspectorViewModelProvider(),
-    //   child: InspectorSignUpContent(showBackButton: showBackButton),
-    // );
   }
 }
