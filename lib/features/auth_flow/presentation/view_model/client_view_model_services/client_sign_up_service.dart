@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/commondomain/entities/based_api_result/api_result_state.dart';
 import 'package:inspect_connect/core/di/app_component/app_component.dart';
@@ -19,7 +18,6 @@ class ClientSignUpService {
 
   Future<void> signUp({
     required GlobalKey<FormState> formKey,
-    required BuildContext context,
   }) async {
     vm.enableSignup1AutoValidate();
     if (!(formKey.currentState?.validate() ?? false)) return;
@@ -64,7 +62,7 @@ class ClientSignUpService {
           //     .saveUser(user.toLocalEntity());
 
           // vm.startOtpFlow(OtpPurpose.signUp);
-          context.pushRoute(OtpVerificationRoute(addShowButton: true));
+          vm.navService.push(OtpVerificationRoute(addShowButton: true));
         },
         error: (e) {
           ToastService.error(e.message ?? signupFailed);

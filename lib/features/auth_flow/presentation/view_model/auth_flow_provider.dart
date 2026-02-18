@@ -1,8 +1,7 @@
-
 import 'package:inspect_connect/core/basecomponents/base_view_model.dart';
 import 'package:inspect_connect/features/auth_flow/domain/enums/auth_user_enum.dart';
 
-class AuthFlowProvider extends BaseViewModel {
+class AuthFlowViewModel extends BaseViewModel {
   AuthUserType? _flow;
 
   AuthUserType? get flow => _flow;

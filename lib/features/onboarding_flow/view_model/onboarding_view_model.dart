@@ -1,12 +1,15 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/basecomponents/base_view_model.dart';
 import 'package:inspect_connect/core/utils/auto_router_setup/auto_router.dart';
+import 'package:inspect_connect/core/utils/auto_router_setup/navigation_service.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/auth_flow_provider.dart';
-import 'package:provider/provider.dart';
 
 class OnBoardingViewModel extends BaseViewModel {
+  final NavigationService _navService;
+  final AuthFlowViewModel _authFlow;
+
+  OnBoardingViewModel(this._navService, this._authFlow);
   bool? _isClient;
 
   bool? get isClient => _isClient;
@@ -18,15 +21,13 @@ class OnBoardingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void createAccount(BuildContext context) {
-    final authFlow = context.read<AuthFlowProvider>();
-
+  void createAccount() {
     if (_isClient == true) {
-      authFlow.setClient();
-      context.replaceRoute(ClientSignUpStep1Route(showBackButton: false));
+      _authFlow.setClient();
+      _navService.replaceRoute(ClientSignUpStep1Route(showBackButton: false));
     } else {
-      authFlow.setInspector();
-      context.replaceRoute(InspectorSignUpRoute(showBackButton: false));
+      _authFlow.setInspector();
+      _navService.replaceRoute(InspectorSignUpRoute(showBackButton: false));
     }
   }
 
@@ -45,15 +46,13 @@ class OnBoardingViewModel extends BaseViewModel {
     return onBoardingBullet3;
   }
 
-  void login(BuildContext context) {
-    final authFlow = context.read<AuthFlowProvider>();
-
+  void login() {
     if (_isClient == true) {
-      authFlow.setClient();
+      _authFlow.setClient();
     } else {
-      authFlow.setInspector();
+      _authFlow.setInspector();
     }
 
-    context.replaceRoute(ClientSignInRoute(showBackButton: false));
+    _navService.replaceRoute(ClientSignInRoute(showBackButton: false));
   }
 }

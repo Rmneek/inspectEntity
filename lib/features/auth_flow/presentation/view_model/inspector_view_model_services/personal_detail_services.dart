@@ -3,4 +3,6 @@ import 'package:inspect_connect/features/auth_flow/presentation/view_model/inspe
 class PersonalDetailServices {
   final InspectorViewModelProvider vm;
   PersonalDetailServices(this.vm);
+
+  
 }

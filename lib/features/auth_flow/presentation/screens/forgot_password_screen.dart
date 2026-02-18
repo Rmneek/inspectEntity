@@ -68,10 +68,7 @@ class ForgotpPasswordView extends StatelessWidget {
                       return;
                     }
                     if (!provider.isSigningIn) {
-                      await provider.requestPasswordReset(
-                        formKey: formKey,
-                        context: context,
-                      );
+                      await provider.requestPasswordReset(formKey: formKey);
                     }
                   },
                 ),

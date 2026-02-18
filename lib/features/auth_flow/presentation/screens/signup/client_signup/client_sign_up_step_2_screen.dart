@@ -23,12 +23,11 @@ class ClientSignUpStep2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-        final vm = context.watch<ClientViewModelProvider>();
+    final vm = context.watch<ClientViewModelProvider>();
 
     return BaseResponsiveWidget(
       initializeConfig: true,
       buildWidget: (ctx, rc, app) {
-
         return CommonAuthBar(
           title: createAccount,
           subtitle: enterPasswordAndAddressDetailToContinue,
@@ -80,7 +79,7 @@ class ClientSignUpStep2View extends StatelessWidget {
                   isLoading: vm.isSigningIn,
                   isDisabled: vm.isSigningIn,
                   onTap: () {
-                    vm.submitStep2(formKey: formKey, context: context);
+                    vm.submitStep2(formKey: formKey);
                   },
                 ),
 

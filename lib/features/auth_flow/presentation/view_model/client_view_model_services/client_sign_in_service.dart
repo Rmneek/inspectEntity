@@ -17,7 +17,6 @@ class ClientSignInService {
 
   Future<void> signIn({
     required GlobalKey<FormState> formKey,
-    required BuildContext context,
   }) async {
     log('--tapped--service->. signIn');
 
@@ -46,7 +45,6 @@ class ClientSignInService {
         data: (user) async {
           // await vm.fetchUserDetail(user: user, context: context);
 
-          if (!context.mounted) return;
 
           if (user.role == 1) {
             log('---------> User got logged in ');

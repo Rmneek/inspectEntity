@@ -67,8 +67,8 @@ class OnBoardingScreen extends StatelessWidget {
 
                   if (vm.showActions)
                     OnBoardingActions(
-                      onCreate: () => vm.createAccount(context),
-                      onLogin: () => vm.login(context),
+                      onCreate: () => vm.createAccount(),
+                      onLogin: () => vm.login(),
                     ),
 
                   const SizedBox(height: 20),

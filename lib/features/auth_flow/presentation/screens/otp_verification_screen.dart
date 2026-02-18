@@ -105,9 +105,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                     const SizedBox(width: 4),
 
                     GestureDetector(
-                      onTap: vm.canResend
-                          ? () => vm.resend(context: context)
-                          : null,
+                      onTap: vm.canResend ? () => vm.resend() : null,
                       child: textWidget(
                         text: vm.canResend
                             ? resendCode
@@ -135,7 +133,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                   isDisabled: !vm.canVerify,
                   isLoading: vm.isSigningIn,
                   onTap: () {
-                    if (vm.canVerify) vm.verify(context: context);
+                    if (vm.canVerify) vm.verify();
                     if (!context.mounted) return;
                   },
                 ),

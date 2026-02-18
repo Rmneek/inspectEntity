@@ -8,6 +8,7 @@ import 'package:inspect_connect/core/utils/helpers/app_flavor_helper/environment
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/auth_flow_provider.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/client_view_model.dart';
+import 'package:inspect_connect/features/common_features/view_model/common_view_model.dart';
 import 'package:provider/provider.dart';
 
 Future<void> initializeFirebaseMessaging() async {
@@ -38,19 +39,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final AppRouter _appRouter = AppRouter();
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+  final AppRouter appRouter = locator<AppRouter>();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthFlowProvider()),
-        ChangeNotifierProvider(create: (_) => ClientViewModelProvider()),
+        ChangeNotifierProvider(create: (_) => locator<AuthFlowViewModel>()),
+        ChangeNotifierProvider(
+          create: (_) => locator<ClientViewModelProvider>(),
+        ),
+        ChangeNotifierProvider(create: (_) => locator<CommonViewModel>()),
       ],
 
       child: MaterialApp.router(
-        routerConfig: _appRouter.config(),
+        routerConfig: appRouter.config(),
         debugShowCheckedModeBanner: false,
       ),
     );

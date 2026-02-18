@@ -90,7 +90,7 @@ class ClientSignUpStep1View extends StatelessWidget {
                   buttonBackgroundColor: AppColors.authThemeColor,
                   borderColor: AppColors.authThemeColor,
                   onTap: () async {
-                    vm.submitStep1(formKey: formKey, context: context);
+                    vm.submitStep1(formKey: formKey, );
                   },
                   text: continueTxt,
                 ),
@@ -99,7 +99,6 @@ class ClientSignUpStep1View extends StatelessWidget {
                   question: alreadyHaveAccTxt,
                   actionText: signInTitle,
                   onTap: () => vm.switchAuth(
-                    context: context,
                     target: AuthTarget.signIn,
                   ),
                   actionColor: AppColors.authThemeLightColor,

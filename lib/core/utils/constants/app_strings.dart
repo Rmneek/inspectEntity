@@ -421,3 +421,7 @@ const String emailRegexExpression =
 
 const String passwordRegexExpression =
     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$';
+
+const String networkError = "Network error occurred";
+const String tapToSelectDateTime = "Tap to select date & time";
+const String tapToChooseDate = "Tap to choose date";

@@ -11,6 +11,7 @@ import 'package:inspect_connect/features/auth_flow/presentation/view_model/inspe
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/inspector_common_auth_bar.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/sign_up_bottom_button_bar.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/stepper_header.dart';
+import 'package:inspect_connect/features/common_features/view_model/common_view_model.dart';
 import 'package:provider/provider.dart';
 
 class InspectorSignUpContent extends StatefulWidget {
@@ -28,6 +29,7 @@ class _InspectorSignUpContentState extends State<InspectorSignUpContent> {
     Future.microtask(() {
       if (mounted) {
         context.read<InspectorViewModelProvider>().init();
+        context.read<CommonViewModel>().fetchCertificateTypes();
       }
     });
   }
@@ -66,7 +68,6 @@ class _InspectorSignUpContentState extends State<InspectorSignUpContent> {
         bottomSection: SignupActionBar(
           vm: vm,
           onNext: () => vm.onNextPressed(context),
-          
         ),
         form: Stack(
           children: [

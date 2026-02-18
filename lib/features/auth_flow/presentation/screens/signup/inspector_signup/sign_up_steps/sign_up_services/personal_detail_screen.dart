@@ -18,8 +18,11 @@ class PersonalDetailsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionTitle(personalDetails),
-        const SizedBox(height: 8),
+        AppSection(
+          title: personalDetails,
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
         AppInputField(
           label: fullNameLabel,
           hint: fullNameLabel,
@@ -32,7 +35,6 @@ class PersonalDetailsScreen extends StatelessWidget {
         const SizedBox(height: 10),
         textWidget(text: phoneNumberLabel, fontWeight: FontWeight.w400),
         const SizedBox(height: 8),
-
         CommonPhoneField(
           controller: inspPhoneCtrl,
           label: phoneNumberLabel,
@@ -43,7 +45,6 @@ class PersonalDetailsScreen extends StatelessWidget {
             cltCountryCodeCtrl.text = dial;
           },
         ),
-
         const SizedBox(height: 10),
         AppInputField(
           label: emailLabel,

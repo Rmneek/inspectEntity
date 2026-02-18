@@ -92,16 +92,12 @@ class ClientSignInView extends StatelessWidget {
                   isLoading: provider.isSigningIn,
                   isElevation: true,
                   isDisabled: provider.isSigningIn,
-                  onTap: () =>
-                      provider.signIn(formKey: formKey, context: context),
+                  onTap: () => provider.signIn(formKey: formKey),
                 ),
                 AuthFormSwitchRow(
                   question: dontHaveAccount,
                   actionText: signUpTitle,
-                  onTap: () => provider.switchAuth(
-                    context: context,
-                    target: AuthTarget.signUp,
-                  ),
+                  onTap: () => provider.switchAuth(target: AuthTarget.signUp),
                   actionColor: AppColors.authThemeLightColor,
                 ),
               ],

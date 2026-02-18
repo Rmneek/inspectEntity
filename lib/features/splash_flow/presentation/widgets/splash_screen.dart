@@ -77,7 +77,7 @@ class SplashScreenState extends State<SplashScreen>
     _controller.forward();
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.read<SplashViewModel>().start(context);
+        context.read<SplashViewModel>().start();
       }
     });
   }
