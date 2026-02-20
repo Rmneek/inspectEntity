@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:inspect_connect/core/basecomponents/base_responsive_widget.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_button.dart';
-import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_input_fields.dart';
 import 'package:inspect_connect/core/utils/constants/app_asset_constants.dart';
 import 'package:inspect_connect/core/utils/constants/app_colors.dart';
@@ -14,6 +13,7 @@ import 'package:inspect_connect/features/auth_flow/presentation/view_model/clien
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/auth_form_switch_row.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/common_auth_bar.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/widgets/common_phone_field.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/section_tile_widget.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -56,10 +56,10 @@ class ClientSignUpStep1View extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 14),
-
-                textWidget(text: phoneNumberLabel, fontWeight: FontWeight.w400),
-
-                const SizedBox(height: 8),
+                AppSection(
+                  title: phoneNumberLabel,
+                  fontWeight: FontWeight.w400,
+                ),
 
                 CommonPhoneField(
                   controller: cltPhoneCtrl,
@@ -90,7 +90,7 @@ class ClientSignUpStep1View extends StatelessWidget {
                   buttonBackgroundColor: AppColors.authThemeColor,
                   borderColor: AppColors.authThemeColor,
                   onTap: () async {
-                    vm.submitStep1(formKey: formKey, );
+                    vm.submitStep1(formKey: formKey);
                   },
                   text: continueTxt,
                 ),
@@ -98,9 +98,7 @@ class ClientSignUpStep1View extends StatelessWidget {
                 AuthFormSwitchRow(
                   question: alreadyHaveAccTxt,
                   actionText: signInTitle,
-                  onTap: () => vm.switchAuth(
-                    target: AuthTarget.signIn,
-                  ),
+                  onTap: () => vm.switchAuth(target: AuthTarget.signIn),
                   actionColor: AppColors.authThemeLightColor,
                 ),
               ],

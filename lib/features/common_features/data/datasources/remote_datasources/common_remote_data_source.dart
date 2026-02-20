@@ -6,6 +6,7 @@ import 'package:inspect_connect/core/commondomain/entities/based_api_result/erro
 import 'package:inspect_connect/core/utils/constants/app_constants.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 import 'package:inspect_connect/core/utils/helpers/http_strategy_helper/concrete_strategies/get_request_strategy.dart';
+import 'package:inspect_connect/core/utils/helpers/http_strategy_helper/concrete_strategies/multipart_request_strategy.dart';
 import 'package:inspect_connect/core/utils/helpers/http_strategy_helper/http_request_context.dart';
 import 'package:inspect_connect/features/common_features/data/dto/upload_image_dto.dart';
 import 'package:inspect_connect/features/common_features/data/models/certificate_inspector_type_datamodel.dart';
@@ -62,15 +63,16 @@ class CommonRemoteDataSourceImpl implements CommonRemoteDataSource {
       );
     }
   }
-@override
+
+  @override
   Future<ApiResultModel<UploadImageResponseModel>> uploadImage({
     required UploadImageDto uploadImageDto,
   }) async {
     try {
       final ApiResultModel<http.Response> res = await _ctx.makeRequest(
         uri: uploadImageEndPoint,
-        httpRequestStrategy: GetRequestStrategy(),
-         headers: {"Content-Type": "multipart/form-data"},
+        httpRequestStrategy: MultipartPostRequestStrategy(),
+        headers: {"Content-Type": "multipart/form-data"},
         requestData: uploadImageDto.toJson(),
       );
       return res.when(
@@ -96,5 +98,5 @@ class CommonRemoteDataSourceImpl implements CommonRemoteDataSource {
         ),
       );
     }
-
-}}
+  }
+}

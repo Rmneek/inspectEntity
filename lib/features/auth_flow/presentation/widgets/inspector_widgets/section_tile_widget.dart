@@ -7,6 +7,8 @@ class AppSection extends StatelessWidget {
   final FontWeight fontWeight;
   final double fontSize;
   final double spacing;
+  final bool error;
+  final String errorMessage;
 
   const AppSection({
     super.key,
@@ -15,6 +17,8 @@ class AppSection extends StatelessWidget {
     this.fontWeight = FontWeight.w500,
     this.fontSize = 14,
     this.spacing = 8,
+    this.error = false,
+    this.errorMessage = '',
   });
 
   @override
@@ -24,7 +28,16 @@ class AppSection extends StatelessWidget {
       children: [
         textWidget(text: title, fontWeight: fontWeight, fontSize: fontSize),
         SizedBox(height: spacing),
-        if (child != null) child!,
+        if (child != null) ...[child!, SizedBox(height: spacing)],
+        if (error)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: textWidget(
+              text: errorMessage,
+              color: Colors.red,
+              fontSize: 12,
+            ),
+          ),
       ],
     );
   }

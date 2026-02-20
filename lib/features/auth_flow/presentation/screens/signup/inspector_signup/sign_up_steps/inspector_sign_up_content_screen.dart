@@ -37,6 +37,7 @@ class _InspectorSignUpContentState extends State<InspectorSignUpContent> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<InspectorViewModelProvider>();
+    final commonProvider = context.watch<CommonViewModel>();
     final steps = [
       PersonalDetailsScreen(vm, vm.personalKey),
       ProfessionalDetailsScreen(vm, vm.professionalKey),
@@ -72,9 +73,11 @@ class _InspectorSignUpContentState extends State<InspectorSignUpContent> {
         form: Stack(
           children: [
             AbsorbPointer(
-              absorbing: vm.isProcessing,
+              absorbing: vm.isProcessing || commonProvider.isProcessing,
               child: Opacity(
-                opacity: vm.isProcessing ? 0.6 : 1,
+                opacity: vm.isProcessing || commonProvider.isProcessing
+                    ? 0.6
+                    : 1,
                 child: Column(
                   children: [
                     AppCardContainer(
@@ -97,7 +100,7 @@ class _InspectorSignUpContentState extends State<InspectorSignUpContent> {
                 ),
               ),
             ),
-            if (vm.isProcessing)
+            if (vm.isProcessing || commonProvider.isProcessing)
               const Positioned.fill(
                 child: Center(child: CircularProgressIndicator()),
               ),

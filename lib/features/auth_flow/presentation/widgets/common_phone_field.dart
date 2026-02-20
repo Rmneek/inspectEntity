@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_text_style.dart';
+import 'package:inspect_connect/core/utils/constants/app_colors.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class CommonPhoneField extends StatelessWidget {
@@ -24,7 +23,6 @@ class CommonPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(controller.text, name: 'PhoneFieldBuild');
     return FormField<String>(
       initialValue: controller.text.isNotEmpty ? controller.text : null,
       validator: (value) => validator?.call(value),
@@ -52,6 +50,17 @@ class CommonPhoneField extends StatelessWidget {
                 errorStyle: appTextStyle(fontSize: 12, color: Colors.red),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: AppColors.authThemeColor,
+                    width: 2,
+                  ),
                 ),
               ),
               onChanged: (phone) {

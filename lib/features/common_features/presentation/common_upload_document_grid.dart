@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
+import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 
 class CommonDocumentGrid extends StatelessWidget {
   final List<File> localFiles;
   final List<String> networkUrls;
-
   final int maxFiles;
   final VoidCallback? onAddTap;
   final Function(int index)? onRemoveLocal;
   final Function(int index)? onRemoveNetwork;
-
+  final Function(int index, bool isNetwork)? onPreview;
   final double childAspectRatio;
-
+  final String uplodeTypeText;
   const CommonDocumentGrid({
     super.key,
     required this.localFiles,
@@ -20,12 +21,14 @@ class CommonDocumentGrid extends StatelessWidget {
     this.onAddTap,
     this.onRemoveLocal,
     this.onRemoveNetwork,
+    this.onPreview,
     this.childAspectRatio = 1.6,
+    this.uplodeTypeText = uploadDocument,
   });
 
   bool _isImage(String path) {
     final ext = path.split('.').last.toLowerCase();
-    return ['jpg', 'jpeg', 'png', 'webp', 'gif'].contains(ext);
+    return imageExtensions.contains(ext);
   }
 
   Widget _buildLocalImage(File file) {
@@ -60,10 +63,7 @@ class CommonDocumentGrid extends StatelessWidget {
     final canAddMore = totalItems < maxFiles;
 
     if (totalItems == 0) {
-      return GestureDetector(
-        onTap: onAddTap,
-        child: _addBox(),
-      );
+      return GestureDetector(onTap: onAddTap, child: _addBox());
     }
 
     return GridView.builder(
@@ -78,122 +78,120 @@ class CommonDocumentGrid extends StatelessWidget {
         childAspectRatio: childAspectRatio,
       ),
       itemBuilder: (context, index) {
-        // NETWORK ITEMS
+        // NETWORK FILES FIRST
         if (index < networkUrls.length) {
           final url = networkUrls[index];
 
-          if (_isImage(url)) {
-            return _imageTile(
-              child: _buildNetworkImage(url),
-              onDelete: () => onRemoveNetwork?.call(index),
-            );
-          }
-
-          return _documentTile(
-            name: url.split('/').last,
-            onDelete: () => onRemoveNetwork?.call(index),
+          return GestureDetector(
+            onTap: () => onPreview?.call(index, true),
+            child: _isImage(url)
+                ? _imageTile(
+                    child: _buildNetworkImage(url),
+                    onDelete: () => onRemoveNetwork?.call(index),
+                  )
+                : _documentTile(
+                    name: url.split('/').last,
+                    onDelete: () => onRemoveNetwork?.call(index),
+                  ),
           );
         }
 
+        // LOCAL FILES
         final localIndex = index - networkUrls.length;
+
         if (localIndex < localFiles.length) {
           final file = localFiles[localIndex];
 
-          if (_isImage(file.path)) {
-            return _imageTile(
-              child: _buildLocalImage(file),
-              onDelete: () => onRemoveLocal?.call(localIndex),
-            );
-          }
-
-          return _documentTile(
-            name: file.path.split('/').last,
-            onDelete: () => onRemoveLocal?.call(localIndex),
+          return GestureDetector(
+            onTap: () => onPreview?.call(localIndex, false),
+            child: _isImage(file.path)
+                ? _imageTile(
+                    child: _buildLocalImage(file),
+                    onDelete: () => onRemoveLocal?.call(localIndex),
+                  )
+                : _documentTile(
+                    name: file.path.split('/').last,
+                    onDelete: () => onRemoveLocal?.call(localIndex),
+                  ),
           );
         }
 
-        return GestureDetector(
-          onTap: onAddTap,
-          child: _addBox(),
-        );
+        // ADD BOX
+        return GestureDetector(onTap: onAddTap, child: _addBox());
       },
     );
   }
 
   Widget _addBox() {
     return Container(
+      width: double.infinity,
+      height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
         color: Colors.grey.shade50,
       ),
-      child: const Center(
-        child: Icon(Icons.upload_file, size: 28, color: Colors.grey),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.upload_file, size: 28, color: Colors.grey),
+          const SizedBox(height: 8),
+          textWidget(text: uplodeTypeText, color: Colors.grey, fontSize: 12),
+        ],
       ),
     );
   }
 
-  Widget _imageTile({
-    required Widget child,
-    required VoidCallback? onDelete,
-  }) {
+  Widget _imageTile({required Widget child, required VoidCallback? onDelete}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Stack(
         children: [
           Container(color: Colors.grey.shade100, child: child),
           if (onDelete != null)
-            Positioned(
-              top: 4,
-              right: 4,
-              child: GestureDetector(
-                onTap: onDelete,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.black54,
-                    shape: BoxShape.circle,
-                  ),
-                  child:
-                      const Icon(Icons.close, color: Colors.white, size: 16),
-                ),
-              ),
-            ),
+            Positioned(top: 4, right: 4, child: _deleteButton(onDelete)),
         ],
       ),
     );
   }
 
-  Widget _documentTile({
-    required String name,
-    VoidCallback? onDelete,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-        color: Colors.white,
-      ),
-      child: Row(
+  Widget _documentTile({required String name, VoidCallback? onDelete}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Stack(
         children: [
-          const Icon(Icons.insert_drive_file, color: Colors.blueAccent),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              name,
-              overflow: TextOverflow.ellipsis,
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.all(8),
+            color: Colors.grey.shade100,
+            child: Row(
+              children: [
+                const Icon(Icons.insert_drive_file, color: Colors.blueAccent),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(name, overflow: TextOverflow.clip, maxLines: 2),
+                ),
+              ],
             ),
           ),
           if (onDelete != null)
-            GestureDetector(
-              onTap: onDelete,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 6),
-                child: Icon(Icons.close, size: 18, color: Colors.red),
-              ),
-            ),
+            Positioned(top: 4, right: 4, child: _deleteButton(onDelete)),
         ],
+      ),
+    );
+  }
+
+  Widget _deleteButton(VoidCallback onDelete) {
+    return GestureDetector(
+      onTap: onDelete,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: const BoxDecoration(
+          color: Colors.black54,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(Icons.close, color: Colors.white, size: 16),
       ),
     );
   }

@@ -24,10 +24,11 @@ class CommonViewModel extends BaseViewModel {
   }) : _getCertificateTypeUseCase = getCertificateTypeUseCase,
        _uploadImageUseCase = uploadImageUseCase;
   List<CertificateInspectorTypeEntity> certificateType = [];
-
+  bool isProcessing = false;
   Future<void> fetchCertificateTypes({String? savedId}) async {
     if (certificateType.isNotEmpty) return;
     try {
+      isProcessing = true;
       final state =
           await executeParamsUseCase<
             List<CertificateInspectorTypeEntity>,
@@ -51,13 +52,15 @@ class CommonViewModel extends BaseViewModel {
           notifyListeners();
         },
         error: (e) {
+          isProcessing = false;
           AppLogger.error("Error fetching certificate types: $e", error: e);
         },
       );
     } catch (e) {
       AppLogger.error("Exception in fetchCertificateTypes: $e");
     } finally {
-      // provider.setProcessing(false);
+      isProcessing = false;
+      notifyListeners();
     }
   }
 
@@ -77,19 +80,17 @@ class CommonViewModel extends BaseViewModel {
     required Function(File file, String url, FilePickerResult result) onSuccess,
     List<String>? allowedExtensions,
   }) async {
+    isProcessing = true;
+    notifyListeners();
     final picker = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: allowedExtensions ?? ['pdf', 'doc', 'docx'],
+      allowedExtensions: allowedExtensions ?? certificateExtensions,
     );
     try {
-      // vm.setProcessing(true);
       if (picker == null || picker.files.single.path == null) return;
       final file = File(picker.files.single.path.toString());
       if (await file.length() > maxFileSizeInBytes) {
-        ToastService.warning(
-          fileMstBeUnder2Txt,
-          // color: AppColors.backgroundColor,
-        );
+        ToastService.warning(fileMstBeUnder2Txt);
         return;
       }
       final uploadImage = UploadImageDto(filePath: file.path);
@@ -103,6 +104,8 @@ class CommonViewModel extends BaseViewModel {
       result?.when(
         data: (response) {
           onSuccess(file, response.fileUrl, picker);
+          isProcessing = false;
+          notifyListeners();
         },
         error: (e) {
           ToastService.error(e.message ?? 'Image upload failed');
@@ -111,7 +114,8 @@ class CommonViewModel extends BaseViewModel {
     } catch (e) {
       AppLogger.error('Error picking file: $e');
     } finally {
-      // vm.setProcessing(false);
+      isProcessing = false;
+      notifyListeners();
     }
   }
 }

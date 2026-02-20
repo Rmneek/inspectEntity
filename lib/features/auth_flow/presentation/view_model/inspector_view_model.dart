@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:country_state_city/country_state_city.dart' as csc;
 import 'package:flutter/material.dart';
 import 'package:inspect_connect/core/basecomponents/base_view_model.dart';
 import 'package:inspect_connect/features/auth_flow/domain/enums/inspector_sing_up_step_enum.dart';
@@ -24,8 +24,6 @@ class InspectorViewModelProvider extends BaseViewModel {
   late final AdditionalDetailServices additionalDetailService;
   late final InspectorPersistanceDataService inspectorPersistanceDataService;
 
-  SignupStep userCurrentStep = SignupStep.personal;
-
   bool autoValidate = false;
   bool isProcessing = false;
 
@@ -36,22 +34,17 @@ class InspectorViewModelProvider extends BaseViewModel {
   final serviceAreaKey = GlobalKey<FormState>();
   final additionalKey = GlobalKey<FormState>();
 
-  CertificateInspectorTypeEntity? selectedCertificate;
-  String? selectedCertificateId;
-
   Future<void> init() async {
     // await loadSavedData();
   }
+
   void notify() {
     notifyListeners();
   }
 
-  void goNext() => inspectorPersistanceDataService.goNext();
+  //--------------------------- Persistance data--------------------------------------------------//
 
-  void goToPrevious() => inspectorPersistanceDataService.goToPrevious();
-
-  void goToStep(int index) => inspectorPersistanceDataService.goToStep(index);
-
+  SignupStep userCurrentStep = SignupStep.personal;
   GlobalKey<FormState> get currentFormKey {
     switch (userCurrentStep) {
       case SignupStep.personal:
@@ -65,8 +58,16 @@ class InspectorViewModelProvider extends BaseViewModel {
     }
   }
 
+  void goNext() => inspectorPersistanceDataService.goNext();
+
+  void goToPrevious() => inspectorPersistanceDataService.goToPrevious();
+
+  void goToStep(int index) => inspectorPersistanceDataService.goToStep(index);
+
   Future<void> onNextPressed(BuildContext context) async =>
       inspectorPersistanceDataService.onNextPressed(context);
+
+  //--------------------------- Personal data--------------------------------------------------//
 
   bool _obscurePassword = true;
   bool get obscurePassword => _obscurePassword;
@@ -76,8 +77,25 @@ class InspectorViewModelProvider extends BaseViewModel {
     notifyListeners();
   }
 
+  //--------------------------- Professional data --------------------------------------------------//
+
+  CertificateInspectorTypeEntity? selectedCertificate;
+  String? selectedCertificateId;
+  List<File> documents = [];
+  List<String> existingDocumentUrls = [];
+  DateTime certificateExpiryDateShow = DateTime.now().add(Duration(days: 30));
+  String certificateExpiryDate = '';
+  List<String> uploadedCertificateUrls = [];
+
+  String? certificateTypeError;
+  String? expiryDateError;
+  String? documentError;
+
   void setCertificateType(CertificateInspectorTypeEntity? t) =>
       professionalDetailServices.setCertificateType(t);
+
+  bool validateProfessionalDetails() =>
+      professionalDetailServices.validateProfessionalDetails();
 
   void initializeCertificate(
     String savedId,
@@ -92,10 +110,6 @@ class InspectorViewModelProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  List<File> documents = [];
-  List<String> existingDocumentUrls = [];
-  DateTime certificateExpiryDateShow = DateTime.now().add(Duration(days: 30));
-  String certificateExpiryDate = '';
   void setDate(DateTime d) => professionalDetailServices.setDate(d);
 
   void removeDocumentAt(int index) =>
@@ -104,5 +118,32 @@ class InspectorViewModelProvider extends BaseViewModel {
   void removeExistingDocumentAt(int index) =>
       professionalDetailServices.removeExistingDocumentAt(index);
 
-  List<String> uploadedCertificateUrls = [];
+  //--------------------------- Service area data --------------------------------------------------//
+
+  String? selectedCountryCode;
+  String? selectedStateCode;
+  List<String> selectedCityNames = [];
+  List<csc.Country>? cachedCountries;
+  Map<String, List<csc.State>> cachedStates = {};
+  Map<String, List<csc.City>> cachedCities = {};
+  String country = '';
+  String state = '';
+  List<String> cities = [];
+  List<String> selectedCities = [];
+  String? countryCode;
+  String? stateCode;
+  String? countryError;
+  String? stateError;
+  String? cityError;
+  String? iccError;
+  String? mailingAddressError;
+  // final Map<String, List<IccDocumentLocalEntity>> iccLocalFiles = {};
+  final Map<String, List<String>> iccUploadedUrls = {};
+  Map<String, String> iccExpiryDates = {};
+  // Map<String, List<IccUiDocument>> iccDocsByCity = {};
+
+
+  
+
+  //--------------------------- Additional data --------------------------------------------------//
 }

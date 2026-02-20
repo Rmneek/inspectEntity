@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_input_fields.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
 import 'package:inspect_connect/core/utils/constants/app_text_editing_controllers.dart';
@@ -33,8 +32,7 @@ class PersonalDetailsScreen extends StatelessWidget {
           },
         ),
         const SizedBox(height: 10),
-        textWidget(text: phoneNumberLabel, fontWeight: FontWeight.w400),
-        const SizedBox(height: 8),
+        AppSection(title: phoneNumberLabel, fontWeight: FontWeight.w400),
         CommonPhoneField(
           controller: inspPhoneCtrl,
           label: phoneNumberLabel,

@@ -3,7 +3,7 @@ import 'package:inspect_connect/core/utils/app_presentation/app_assets_widget.da
 import 'package:inspect_connect/core/utils/app_presentation/app_common_card_container.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
 import 'package:inspect_connect/core/utils/helpers/responsive_ui_helper/responsive_config.dart';
-import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/cusotm_painter.dart';
+import 'package:inspect_connect/features/auth_flow/presentation/widgets/inspector_widgets/custom_painter.dart';
 
 class InspectorCommonAuthBar extends StatelessWidget {
   final String title;

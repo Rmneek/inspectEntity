@@ -94,4 +94,3 @@ class StepperHeader extends StatelessWidget {
     );
   }
 }
-

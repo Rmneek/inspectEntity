@@ -111,7 +111,7 @@ const String verifyOtp = '$verifyTxt Your OTP Now';
 const String pleaseSelectCertificateType = "Please select a certificate type";
 
 const String uploadAtLeastOneDoc =
-    "Please upload at least one certification document";
+    "Please upload at least one document";
 
 const String fileSizeLimit = "File must be under 2 MB";
 
@@ -139,7 +139,7 @@ String cityNotFound(String city, String state) =>
 const maxFileSizeInBytes = 4 * 1024 * 1024;
 
 const certificateExtensions = ['pdf', 'doc', 'docx'];
-const imageExtensions = ['jpg', 'jpeg', 'png', 'heic', 'gif', 'bmp'];
+const imageExtensions = ['jpg', 'jpeg', 'png', 'heic','webp' 'gif', 'bmp'];
 const mixedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
 
 const uploadTypeId = 'id';
@@ -191,11 +191,13 @@ const String httpsProtocol = 'https://';
 const String certificateType = 'Certificate Type';
 const String selectExpirationDate = 'Select Expiration Date';
 const String uploadCertificationDocuments =
-    'Upload Certification Documents (max 4)';
+    'Upload ICC Documents (max 4)';
 const String select = 'Select';
 const String selectCertificateType = '$select $certificateType';
 
 const String uploadDocument = 'Upload Document';
+const String uploadImage = 'Upload Image';
+
 const String maxNumber = 'You can select a maximum of';
 const String citiesText = 'Cities';
 const String selectCities = '$select $citiesText';

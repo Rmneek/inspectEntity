@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inspect_connect/core/utils/helpers/app_logger/app_logger.dart';
 import 'package:inspect_connect/features/auth_flow/domain/enums/inspector_sing_up_step_enum.dart';
 import 'package:inspect_connect/features/auth_flow/presentation/view_model/inspector_view_model.dart';
 
@@ -27,12 +28,12 @@ class InspectorPersistanceDataService {
     }
   }
 
-    void enableAutoValidate() {
+  void enableAutoValidate() {
     vm.autoValidate = true;
     vm.notify();
   }
 
-    Future<void> onNextPressed(BuildContext context) async {
+  Future<void> onNextPressed(BuildContext context) async {
     final form = vm.currentFormKey.currentState;
 
     if (!(form?.validate() ?? false)) {
@@ -51,6 +52,13 @@ class InspectorPersistanceDataService {
         break;
 
       case SignupStep.professional:
+        if (!vm.validateProfessionalDetails()) {
+          AppLogger.info('invalidated');
+
+          vm.isProcessing = false;
+          vm.notify();
+          return;
+        }
         // if (!validateProfessionalDetails()) {
         //   isProcessing = false;
         //   notifyListeners();
@@ -122,5 +130,4 @@ class InspectorPersistanceDataService {
       // signUp(context: context);
     }
   }
-
 }

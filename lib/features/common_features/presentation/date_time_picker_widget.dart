@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inspect_connect/core/utils/app_presentation/app_common_button.dart';
 import 'package:inspect_connect/core/utils/app_presentation/app_common_text_widget.dart';
 import 'package:inspect_connect/core/utils/constants/app_colors.dart';
 import 'package:inspect_connect/core/utils/constants/app_strings.dart';
@@ -35,9 +36,7 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
 
     selectedDateTime =
         widget.initialDateTime ??
-        (widget.showTimePicker
-            ? now 
-            : now.add(const Duration(days: 30)));
+        (widget.showTimePicker ? now : now.add(const Duration(days: 30)));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onDateTimeSelected(selectedDateTime);
@@ -55,7 +54,9 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
   }
 
   Future<void> _pickDateTime(BuildContext context) async {
-    final now = DateTime.now(); 
+    final now = DateTime.now().add(
+      Duration(days: widget.showTimePicker ? 1 : 30),
+    );
 
     await showDialog(
       context: context,
@@ -72,49 +73,62 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
                 title: textWidget(text: selectDateTime),
                 content: SizedBox(
                   width: 300,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          height: 300,
-                          child: CalendarDatePicker(
-                            initialDate: provider.tempDate,
-                            firstDate: now,
-                            lastDate: now.add(const Duration(days: 365)),
-                            onDateChanged: provider.setDate,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: constraints.maxWidth > 360
+                              ? 360
+                              : constraints.maxWidth,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 300,
+                                child: CalendarDatePicker(
+                                  initialDate: provider.tempDate,
+                                  firstDate: now,
+                                  lastDate: widget.showTimePicker
+                                      ? now.add(const Duration(days: 365))
+                                      : DateTime(2100),
+                                  onDateChanged: provider.setDate,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              if (widget.showTimePicker)
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    final picked = await showTimePicker(
+                                      context: context,
+                                      initialTime: provider.tempTime,
+                                    );
+                                    if (picked != null) {
+                                      provider.setTime(picked);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.access_time),
+                                  label: textWidget(
+                                    text: pickTime,
+                                    color: AppColors.whiteColor,
+                                  ),
+                                ),
+
+                              if (provider.errorMessage != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12),
+                                  child: textWidget(
+                                    text: provider.errorMessage!,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 16),
-
-                        if (widget.showTimePicker)
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              final picked = await showTimePicker(
-                                context: context,
-                                initialTime: provider.tempTime,
-                              );
-                              if (picked != null) {
-                                provider.setTime(picked);
-                              }
-                            },
-                            icon: const Icon(Icons.access_time),
-                            label: textWidget(
-                              text: pickTime,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-
-                        if (provider.errorMessage != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: textWidget(
-                              text: provider.errorMessage!,
-                              color: Colors.red,
-                            ),
-                          ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
                 actions: [
@@ -122,8 +136,11 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
                     onPressed: () => Navigator.pop(context),
                     child: textWidget(text: cancelTxt),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
+
+                  AppButton(
+                    text: confirmTxt,
+                    width: 100,
+                    onTap: () {
                       setState(() {
                         selectedDateTime = provider.chosenDateTime;
                       });
@@ -132,10 +149,8 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
 
                       Navigator.pop(context);
                     },
-                    child: textWidget(
-                      text: confirmTxt,
-                      color: AppColors.whiteColor,
-                    ),
+                    buttonBackgroundColor: AppColors.authThemeColor,
+                    textColor: AppColors.whiteColor,
                   ),
                 ],
               );
@@ -156,10 +171,7 @@ class _DateTimePickerWidgetState extends State<DateTimePickerWidget> {
       onTap: () => _pickDateTime(context),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: widget.showTimePicker ? 16 : 6,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey),
